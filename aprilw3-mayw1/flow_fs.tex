@@ -1,0 +1,67 @@
+% Class environment
+\documentclass{article}
+\usepackage[latin1]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, calc}
+
+% Defining environment
+\usepackage{verbatim}
+\usepackage[active,tightpage]{preview} % Cropping image to full size
+\PreviewEnvironment{tikzpicture} % Picture as pdf
+\setlength\PreviewBorder{50pt}%
+
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, text width=5em,
+minimum width=4em, minimum height=1cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{decision} = [diamond, draw, fill=green!30,text width=7em, text badly centered, node distance=2.5cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw=black, fill=orange!30,
+    text width=8em, text centered, rounded corners, minimum width=5em, minimum height=1cm]
+\tikzstyle{line} = [draw, very thick, color=black!70, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=2.5cm,
+    minimum height=2em]
+\tikzstyle{map} = [rectangle, draw=black, fill=red!60,text width=6em, text centered, rounded corners, minimum width=3cm, minimum height=2cm]
+
+\begin{document}
+
+\begin{tikzpicture}[scale=2, node distance = 2.5cm, auto]
+    % Place nodes
+    \node [io] (init) {Initial State};
+    \node [block, below of=init] (particle_generation) {Particle Generation};
+    \node [io, left of=particle_generation, xshift=-2cm] (size) {Particle Size};
+    \node [io, right of=particle_generation,xshift=2cm] (landmark) {Landmark Set};
+    \node [decision, below of=particle_generation,yshift=-0.5cm] (check_measurement) {Measurement Check};
+    \node [block, right of=check_measurement, xshift=2.5cm] (move) {Move robot};
+    \node [io, below of=move] (parameters) {Filter parameters};
+    \node [block, below of=check_measurement, yshift=-0.5cm] (correspondence) {Landmark-Measurement Correspondence};
+    \node [decision, below of=correspondence,yshift=-2cm] (threshold) {$<$ min. correspondence};
+    \node [block, left of=threshold,xshift=-2cm] (new_landmark) {Create new landmark}; 
+    \node [block, below of=new_landmark] (new_weight) {Particle weight};
+    \node [block, right of=threshold,xshift=2.5cm] (update) {Landmark update};
+    \node [block, below of=update] (old_weight) {Particle weight};
+    \node [block, below of=threshold] (resample) {Resampling step};
+    \node [io, below of=resample, text width=1.2cm, text centered] (new_set) {Particles};
+    \node [map, right of=new_set, xshift=2.5cm] (output) {Map and Robot trajectory};
+
+    % Draw edges
+    \path [line] (init) -- (particle_generation);
+    \path [line] (particle_generation) -- (check_measurement);
+    \path [line] (size) -- (particle_generation);
+    \path [line] (landmark) -- (particle_generation);
+    \path [line] (check_measurement) -- node[anchor=south, color=black,xshift=-0.5cm]{No}(move);
+    \path [line] (move.north) -- ++(0,0.6) node[anchor=north, text width=1cm, color=black, xshift=0.7cm, yshift=-0.1cm]{New State} |- ($(check_measurement.north) + (0,0.25) $);
+    \path [line] (parameters)node[anchor=south, color=black, yshift=-1.5cm]{Prediction Step} -- (move);
+    \draw [black,dashed] ($(move.north west)+(-0.5,0.6)$) rectangle ($(parameters.south east)+(0.75,-0.15)$);
+    \path [line] (check_measurement) -- node[anchor=east, color=black]{Yes}(correspondence);
+    \path [line] (correspondence) -- node[anchor=east, color=black, text width=2.5cm, text centered, yshift=0.5cm]{maximum likelihood (ML)}(threshold);
+    \path [line] (threshold) -- node[anchor=south,color=black]{Yes}(new_landmark);
+    \path [line] (new_landmark) -- node[anchor=east,color=black, text width=2.5cm, text centered]{minimum correspondence}(new_weight);
+    \path [line] (threshold) -- node[anchor=south,color=black]{No}(update);
+    \path [line] (update) -- node[anchor=west,color=black,text width=2cm]{maximum likelihood}(old_weight);
+    \path [line] (old_weight) -- node[anchor=south,color=black,xshift=2.5cm,yshift=4cm]{Correction Step} (resample);
+    \path [line] (new_weight) -- (resample);
+    \path [line] (resample) -- (new_set);
+    \path [line] (new_set.west) -- +(-3,0) |- ($(check_measurement.north)+(0,0.25)$);
+    \path [line] (new_set) -- node[anchor=south, color=black]{ML} (output);
+    \draw [black, dashed] ($(new_landmark.north west)+(-0.65,0.8)$) rectangle ($(old_weight.south west)+(1.75,-0.15)$);
+\end{tikzpicture}
+
+\end{document}

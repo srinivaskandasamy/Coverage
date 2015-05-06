@@ -1,0 +1,132 @@
+\documentclass{article}
+
+\usepackage{colortbl}   % Provides \rowcolor
+\usepackage{calc}       % For doing math with dimensions
+\usepackage{setspace}   % Provides \singlespacing for turning off doublespacing
+
+\usepackage[graphics,tightpage,active]{preview}
+\PreviewEnvironment{tikzpicture}
+\PreviewEnvironment{equation}
+\PreviewEnvironment{equation*}
+
+
+\pagestyle{empty}
+\thispagestyle{empty}
+
+
+\begin{document}
+\begin{tikzpicture}[node distance=4cm]
+    % \draw[help lines] (-10,-20) grid (10,0);
+    \begin{scope}[on grid,>=triangle 60]
+
+        %---------------------- Position nodes -------------------------
+        % Interrupt on received character
+        \node (interrupt) [block] at (0,0) {
+            Interrupt on character received via USART
+        };
+
+        % Write character to receive buffer
+        \node [block, below=2.5cm of interrupt] (writechar) {
+            Write character to receive buffer
+        };
+
+        % Is the character a terminator?
+        \node [decision, below=3cm of writechar] (isterminator) {
+            Character is command terminator?
+        };
+
+        % Is the character count zero?
+        \node [decision, left=of isterminator] (isnochar) {
+            Character count is zero?
+        };
+
+
+        % Increment character counter
+        \node [block, right=of isterminator] (counter++) {
+            Increment character counter
+        };
+
+        % Parse buffer is locked?
+        \node [decision, below=of isnochar] (isplock) {
+            Parse buffer locked?
+        };
+
+        % Terminate string in receive buffer
+        \node [block, right=of isplock] (termstr) {
+            Terminate string in receive buffer
+        };
+
+        % Copy receive buffer to parse buffer
+        \node [block, below=of termstr] (buffcopy) {
+            Copy receive buffer to parse buffer
+        };
+
+        % Lock parse buffer
+        \node [block, below=2cm of buffcopy] (setlock) {
+            Set parse buffer lock
+        };
+
+        % Erase receive buffer
+        \node [block, below=2cm of setlock] (erase) {
+            Erase receive buffer
+        };
+
+        % Character count is above limit?
+        \node [decision, below=of counter++] (islimit) {
+            Character count above limit?
+        };
+
+        % Receive buffer overflow error
+        \node [block, below=of islimit] (overflow) {
+            Receive buffer overflow error
+        };
+
+        % Command process speed error
+        \node [block, below=of isplock] (toofast) {
+            Command process speed error
+        };
+
+        % Exit interrupt
+        \node [block, below=2cm of erase] (exit) {
+            Exit interrupt
+        };
+
+        % Increment write pointer
+        \node [block, right=of exit] (pointer++) {
+            Increment receive buffer write pointer
+        };
+
+        %------------------------ Draw arrows --------------------------
+
+        \draw [->] (interrupt.south) -- (writechar.north);
+        \draw [->] (writechar.south) -- (isterminator.north);
+        \draw [->] (isterminator.west) -- (isnochar.east)
+            node[near start,above]{Yes};
+        \draw [->] (isnochar.west) -- +(-1,0) |- (exit.west);
+        \draw [solid] (isnochar.west) -- +(-1,0)
+            node[near start,above]{Yes};
+        \draw [->] (isterminator.east) -- (counter++.west)
+            node[near start,above]{No};
+        \draw [->] (isnochar.south) -- (isplock.north)
+            node[near start,right]{No};
+        \draw [->] (isplock.east) -- (termstr.west)
+            node[near start,above]{No};
+        \draw [->] (termstr.south) -- (buffcopy.north);
+        \draw [->] (counter++.south) -- (islimit.north);
+        \draw [->] (islimit.south) -- (overflow.north)
+            node[near start,right]{Yes};
+        \draw [->] (overflow.south) |- (erase.east);
+        \draw [->] (islimit.east) -- +(1,0) |- (pointer++.east);
+        \draw [solid] (islimit.east) -- +(1,0)
+            node[near start,above]{No}; % Can't put labels on paths with 3 segments
+        \draw [->] (pointer++.west) -- (exit.east);
+        \draw [->] (isplock.south) -- (toofast.north)
+            node[near start,right]{Yes};
+        \draw [->] (toofast.south) |- (erase.west);
+        \draw [->] (buffcopy.south) -- (setlock.north);
+        \draw [->] (setlock.south) -- (erase.north);
+        \draw [->] (erase.south) -- (exit.north);
+
+    \end{scope}
+\end{tikzpicture}
+\end{document}
