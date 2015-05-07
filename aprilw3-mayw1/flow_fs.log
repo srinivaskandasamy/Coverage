@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.1.14)  3 MAY 2015 19:16
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.1.14)  7 MAY 2015 11:08
 entering extended mode
 **flow_fs.tex
 (C:\Users\Srinivas\Documents\GitHub\Coverage\aprilw3-mayw1\flow_fs.tex
@@ -417,7 +417,17 @@ Overfull \hbox (3.57906pt too wide) in paragraph at lines 41--41
  []
 
 
-Overfull \hbox (80.79074pt too wide) in paragraph at lines 65--65
+Overfull \hbox (30.9404pt too wide) in paragraph at lines 51--51
+[][][][]\OT1/cmr/m/n/10 Prediction 
+ []
+
+
+Overfull \hbox (5.21812pt too wide) in paragraph at lines 51--51
+\OT1/cmr/m/n/10 Step  
+ []
+
+
+Overfull \hbox (80.79074pt too wide) in paragraph at lines 66--66
 [][] 
  []
 
@@ -427,7 +437,7 @@ Preview: Tightpage -3276800 -3276800 3276800 3276800
 Here is how much of TeX's memory you used:
  12366 strings out of 493705
  258233 string characters out of 3144561
- 303306 words of memory out of 3000000
+ 303751 words of memory out of 3000000
  15500 multiletter control sequences out of 15000+200000
  3640 words of font info for 14 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
@@ -435,7 +445,7 @@ Here is how much of TeX's memory you used:
 <C:/Pr
 ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Fi
 les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb>
-Output written on flow_fs.pdf (1 page, 29929 bytes).
+Output written on flow_fs.pdf (1 page, 30401 bytes).
 PDF statistics:
  17 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

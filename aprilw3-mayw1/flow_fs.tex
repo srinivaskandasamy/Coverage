@@ -48,7 +48,8 @@ minimum width=4em, minimum height=1cm, text centered, draw=black, fill=blue!30]
     \path [line] (landmark) -- (particle_generation);
     \path [line] (check_measurement) -- node[anchor=south, color=black,xshift=-0.5cm]{No}(move);
     \path [line] (move.north) -- ++(0,0.6) node[anchor=north, text width=1cm, color=black, xshift=0.7cm, yshift=-0.1cm]{New State} |- ($(check_measurement.north) + (0,0.25) $);
-    \path [line] (parameters)node[anchor=south, color=black, yshift=-1.5cm]{Prediction Step} -- (move);
+    \path [line] (parameters)node[anchor=south, color=black, xshift=0.5cm, yshift=-2cm, text width=0.5cm]{Prediction Step} -- (move);
+    \path [line,dashed] ($(correspondence.east)+(-0.75,-0.6)$) -| node[anchor=north,xshift=-1cm,color=black!70]{v2.0}($(parameters.south)+(-0.5,-0.15)$);
     \draw [black,dashed] ($(move.north west)+(-0.5,0.6)$) rectangle ($(parameters.south east)+(0.75,-0.15)$);
     \path [line] (check_measurement) -- node[anchor=east, color=black]{Yes}(correspondence);
     \path [line] (correspondence) -- node[anchor=east, color=black, text width=2.5cm, text centered, yshift=0.5cm]{maximum likelihood (ML)}(threshold);
